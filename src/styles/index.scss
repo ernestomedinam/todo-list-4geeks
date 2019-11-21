@@ -11,3 +11,41 @@
     import 'relative/path/to/stylesheet.scss';
 
 */
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    margin: 2rem auto;
+    background-color: #f6f6f6;
+    color: #4d4d4d;
+}
+
+.todo-header {
+    margin-top: 10px;
+}
+
+.todo-body {
+    width: 100%;
+    border: 1px solid gray;
+    margin: 0;
+    padding: 1rem;
+
+    form > input {
+        width: 80%;
+
+    }
+
+    .main-list {
+        width: 80%;
+        list-style: none;
+        .list-item {
+            margin: 3px 0;
+            text-decoration: none;
+            border: 1px gray solid;
+        }
+
+    }
+}
+
