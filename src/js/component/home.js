@@ -79,7 +79,15 @@ class Home extends React.Component {
 					</ul>
 					<footer className="list-footer mx-auto mt-5">
 						<p>
-							Faltan {this.state.tasks.length} tareas por hacer...
+							{this.state.tasks.length > 1
+								? `Faltan ${
+										this.state.tasks.length
+								  } tareas por hacer...`
+								: this.state.tasks.length == 1
+									? `Falta ${
+											this.state.tasks.length
+									  } sola tarea por hacer!`
+									: "Felicitaciones, ya hiciste todo!!! Viva el ocio!!!"}
 						</p>
 					</footer>
 				</section>
