@@ -70,9 +70,14 @@ class Home extends React.Component {
 	}
 	handleAddTask(e) {
 		e.preventDefault();
-		let task = e.target.value;
 		this.setState({
-			tasks: [...this.state.tasks, this.state.newTask],
+			tasks: [
+				...this.state.tasks,
+				{
+					label: this.state.newTask,
+					done: false
+				}
+			],
 			newTask: ""
 		});
 	}
@@ -84,7 +89,7 @@ class Home extends React.Component {
 	}
 	handleDeleteTask(e, indexToDelete) {
 		let tasksLeft = this.state.tasks.filter(
-			(value, index) => index != indexToDelete
+			(task, index) => index != indexToDelete
 		);
 		this.setState({
 			tasks: tasksLeft,
