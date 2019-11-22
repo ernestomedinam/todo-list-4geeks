@@ -34,11 +34,9 @@ class Home extends React.Component {
 		});
 	}
 	handleDeleteTask(e, indexToDelete) {
-		console.log("here ", e, indexToDelete);
 		let tasksLeft = this.state.tasks.filter(
 			(value, index) => index != indexToDelete
 		);
-		console.log(tasksLeft);
 		this.setState({
 			tasks: tasksLeft,
 			newTask: this.state.newTask
