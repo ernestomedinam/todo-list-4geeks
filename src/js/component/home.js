@@ -15,7 +15,18 @@ class Home extends React.Component {
 			],
 			newTask: ""
 		};
-	}
+    }
+    handleAddTask(e) {
+        e.preventDefault();
+        let task = e.target.value;
+        this.setState({
+            ...this.state,
+            tasks: [
+                ...this.state.tasks,
+                this.state.newTask
+            ]
+        });
+    }
 	render() {
 		let tasks = this.state.tasks;
 		return (
@@ -24,7 +35,9 @@ class Home extends React.Component {
 					<h1 className="display-3">Mi lista de tareas</h1>
 				</header>
 				<section className="todo-body">
-					<form className="text-center">
+					<form
+                        onSubmit={handleAddTask}
+                        className="text-center">
 						<input
 							className="my-5 mx-auto display-4"
 							placeholder="Agrega más tareas!"
