@@ -59,7 +59,10 @@ class Home extends React.Component {
 			})
 			.then(data => {
 				console.log(data);
-				return data;
+				this.setState({
+					tasks: data,
+					newTask: ""
+				});
 			})
 			.catch(error => {
 				console.log(error);
@@ -105,12 +108,12 @@ class Home extends React.Component {
 						/>
 					</form>
 					<ul className="main-list mx-auto">
-						{tasks.map((value, index) => {
+						{tasks.map((task, index) => {
 							return (
 								<li
 									key={index}
 									className="list-item display-4 my-2 mx-0">
-									{value}
+									{task.label}
 									<span
 										onClick={e =>
 											this.handleDeleteTask(e, index)
