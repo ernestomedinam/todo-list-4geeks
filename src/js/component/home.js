@@ -17,6 +17,7 @@ class Home extends React.Component {
 		};
 		this.handleAddTask = this.handleAddTask.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleDeleteTask = this.handleDeleteTask.bind(this);
 	}
 	handleAddTask(e) {
 		e.preventDefault();
@@ -28,8 +29,19 @@ class Home extends React.Component {
 	}
 	handleInputChange(e) {
 		this.setState({
-			...this.state.tasks,
+			...this.state,
 			newTask: e.target.value
+		});
+	}
+	handleDeleteTask(e, indexToDelete) {
+		console.log("here ", e, indexToDelete);
+		let tasksLeft = this.state.tasks.filter(
+			(value, index) => index != indexToDelete
+		);
+		console.log(tasksLeft);
+		this.setState({
+			tasks: tasksLeft,
+			newTask: this.state.newTask
 		});
 	}
 	render() {
@@ -55,7 +67,12 @@ class Home extends React.Component {
 									key={index}
 									className="list-item display-4 my-2 mx-0">
 									{value}
-									<span className="delete-button" />
+									<span
+										onClick={e =>
+											this.handleDeleteTask(e, index)
+										}
+										className="delete-button"
+									/>
 								</li>
 							);
 						})}
