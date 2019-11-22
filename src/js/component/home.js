@@ -55,6 +55,7 @@ class Home extends React.Component {
 									key={index}
 									className="list-item display-4 my-2 mx-0">
 									{value}
+									<span className="delete-button" />
 								</li>
 							);
 						})}
