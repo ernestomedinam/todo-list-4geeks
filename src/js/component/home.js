@@ -7,17 +7,36 @@ class Home extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tasks: [
-				"Hacer café",
-				"Hacer la cama",
-				"Tomar agua",
-				"Regar las plantas"
-			],
+			tasks: [],
 			newTask: ""
 		};
 		this.handleAddTask = this.handleAddTask.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleDeleteTask = this.handleDeleteTask.bind(this);
+	}
+	componentDidMount() {
+		let currentTasks = [];
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				console.log(response.ok);
+				console.log(response.status);
+				console.log(response.text());
+				return response.json();
+			})
+			.then(data => {
+				console.log(data);
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 	handleAddTask(e) {
 		e.preventDefault();
