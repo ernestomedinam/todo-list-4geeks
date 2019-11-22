@@ -52,6 +52,7 @@ class Home extends React.Component {
 						.catch(error => {
 							console.log(error);
 						});
+					return emptyArray;
 				} else {
 					// if user exists, return response in json format
 					return response.json();
@@ -76,6 +77,10 @@ class Home extends React.Component {
 		currentTasks.push({
 			label: this.state.newTask,
 			done: false
+		});
+		this.setState({
+			...this.state,
+			newTask: ""
 		});
 		console.log(currentTasks);
 		// send request to API
@@ -121,15 +126,6 @@ class Home extends React.Component {
 			.catch(error => {
 				console.log(error);
 			});
-		// this.setState({
-		// 	tasks: [
-		// 		...this.state.tasks,
-		// 		{
-
-		// 		}
-		// 	],
-		// 	newTask: ""
-		// });
 	}
 	handleInputChange(e) {
 		this.setState({
@@ -141,10 +137,49 @@ class Home extends React.Component {
 		let tasksLeft = this.state.tasks.filter(
 			(task, index) => index != indexToDelete
 		);
-		this.setState({
-			tasks: tasksLeft,
-			newTask: this.state.newTask
-		});
+		console.log(tasksLeft);
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "PUT",
+				body: JSON.stringify(tasksLeft),
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				if (response.ok) {
+					// tasks updated successfully
+					fetch(
+						"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+						{
+							method: "GET",
+							headers: {
+								"Content-Type": "application/JSON"
+							}
+						}
+					)
+						.then(response => {
+							return response.json();
+						})
+						.then(data => {
+							this.setState({
+								tasks: data,
+								newTask: ""
+							});
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				} else {
+					// something failed
+					console.log("error fetching tasks ", response.text());
+				}
+			})
+			.catch(error => {
+				console.log(error);
+			});
 	}
 	render() {
 		let tasks = this.state.tasks;
@@ -163,21 +198,22 @@ class Home extends React.Component {
 						/>
 					</form>
 					<ul className="main-list mx-auto">
-						{tasks.map((task, index) => {
-							return (
-								<li
-									key={index}
-									className="list-item display-4 my-2 mx-0">
-									{task.label}
-									<span
-										onClick={e =>
-											this.handleDeleteTask(e, index)
-										}
-										className="delete-button"
-									/>
-								</li>
-							);
-						})}
+						{tasks.length > 0 &&
+							tasks.map((task, index) => {
+								return (
+									<li
+										key={index}
+										className="list-item display-4 my-2 mx-0">
+										{task.label}
+										<span
+											onClick={e =>
+												this.handleDeleteTask(e, index)
+											}
+											className="delete-button"
+										/>
+									</li>
+								);
+							})}
 					</ul>
 					<footer className="list-footer mx-auto mt-5">
 						<p>
