@@ -61,7 +61,7 @@ class Home extends React.Component {
 				console.log(data);
 				this.setState({
 					tasks: data,
-					newTask: ""
+					newTask: this.state.newTask
 				});
 			})
 			.catch(error => {
