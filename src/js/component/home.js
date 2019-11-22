@@ -42,7 +42,7 @@ class Home extends React.Component {
 						})}
 					</ul>
 					<footer className="list-footer mx-auto mt-5">
-						<p>faltan x tareas por hacer</p>
+						<p>Faltan {this.state.tasks.length} tareas por hacer...</p>
 					</footer>
 				</section>
 			</div>
