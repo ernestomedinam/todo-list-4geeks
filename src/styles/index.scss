@@ -48,6 +48,42 @@ body {
         list-style: none;
         .list-item {
             text-decoration: none;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-between;
+            &:hover {
+                .delete-button {
+                    visibility: visible;
+            
+                }
+            }
+
+            .delete-button {
+                visibility: hidden;
+                align-self: center;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                // background-color: red;
+                &::before, &::after {
+                    content: "";
+                    width: 4px;
+                    height: 20px;
+                    background-color: darkred;  
+                    position: absolute;  
+                }
+                &::before {
+                    transform: rotate(45deg);
+                }
+                &::after {
+                    transform: rotate(-45deg);
+                }
+                // &:hover {
+                //     visibility: visible;
+                // }
+            }
+
+           
         }
     }
 
