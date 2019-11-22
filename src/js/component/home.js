@@ -70,16 +70,66 @@ class Home extends React.Component {
 	}
 	handleAddTask(e) {
 		e.preventDefault();
-		this.setState({
-			tasks: [
-				...this.state.tasks,
-				{
-					label: this.state.newTask,
-					done: false
-				}
-			],
-			newTask: ""
+		// create variable with current tasks in state
+		let currentTasks = this.state.tasks;
+		// add new task
+		currentTasks.push({
+			label: this.state.newTask,
+			done: false
 		});
+		console.log(currentTasks);
+		// send request to API
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "PUT",
+				body: JSON.stringify(currentTasks),
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				if (response.ok) {
+					// task added successfully
+					fetch(
+						"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+						{
+							method: "GET",
+							headers: {
+								"Content-Type": "application/JSON"
+							}
+						}
+					)
+						.then(response => {
+							return response.json();
+						})
+						.then(data => {
+							this.setState({
+								tasks: data,
+								newTask: ""
+							});
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				} else {
+					// something failed
+					console.log("error fetching tasks ", response.text());
+				}
+			})
+			.catch(error => {
+				console.log(error);
+			});
+		// this.setState({
+		// 	tasks: [
+		// 		...this.state.tasks,
+		// 		{
+
+		// 		}
+		// 	],
+		// 	newTask: ""
+		// });
 	}
 	handleInputChange(e) {
 		this.setState({
