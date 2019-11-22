@@ -15,7 +15,7 @@ class Home extends React.Component {
 		this.handleDeleteTask = this.handleDeleteTask.bind(this);
 	}
 	componentDidMount() {
-		let currentTasks = [];
+		// try to get user tasks
 		fetch(
 			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
 			{
@@ -26,13 +26,40 @@ class Home extends React.Component {
 			}
 		)
 			.then(response => {
-				console.log(response.ok);
-				console.log(response.status);
-				console.log(response.text());
-				return response.json();
+				// clone response so to access on console.logs without accessing response.
+				let res = response.clone();
+				console.log(res.ok);
+				console.log(res.status);
+				console.log(res.text());
+				// if use does not exist, create it
+				if (res.status == 404) {
+					let emptyArray = [];
+					fetch(
+						"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+						{
+							method: "POST",
+							body: JSON.stringify(emptyArray),
+							headers: {
+								"Content-Type": "application/JSON"
+							}
+						}
+					)
+						.then(response => {
+							console.log("tried to create user: ");
+							console.log(response.status);
+							console.log(response.text());
+						})
+						.catch(error => {
+							console.log(error);
+						});
+				} else {
+					// if user exists, return response in json format
+					return response.json();
+				}
 			})
 			.then(data => {
 				console.log(data);
+				return data;
 			})
 			.catch(error => {
 				console.log(error);
