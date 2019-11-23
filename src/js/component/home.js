@@ -94,7 +94,7 @@ class Home extends React.Component {
 	}
 	handleAddTask(e) {
 		e.preventDefault();
-		if (this.state.newTask.length < 3) {
+		if (this.state.newTask.trim().length < 3) {
 			console.log("sorry, can't create such short tasks!");
 			alert("sorry, can't create such short tasks!");
 		} else {
