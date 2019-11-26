@@ -12,4 +12,4 @@ import "../styles/index.scss";
 import Home from "./component/home.js";
 
 //render your react application
-ReactDOM.render(<Home />, document.querySelector("#app"));
+ReactDOM.render(<Home />, document.querySelector("#root"));
