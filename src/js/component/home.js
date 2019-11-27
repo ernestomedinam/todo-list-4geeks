@@ -7,17 +7,74 @@ class Home extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			tasks: [
-				"Hacer café",
-				"Hacer la cama",
-				"Tomar agua",
-				"Regar las plantas"
-			],
+			tasks: [],
 			newTask: ""
 		};
 		this.handleAddTask = this.handleAddTask.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleDeleteTask = this.handleDeleteTask.bind(this);
+	}
+	componentDidMount() {
+		// solicitar tareas del usuario
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "GET",
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(respuesta => {
+				let response = respuesta.clone();
+				console.log(response.status, response.text());
+				if (response.ok) {
+					// recibiemos nuestra lista
+					return respuesta.json();
+				} else if (response.status === 404) {
+					// crear usuario
+					console.log("intentando crear usuario");
+					fetch(
+						"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+						{
+							method: "POST",
+							body: "[]",
+							headers: {
+								"Content-Type": "application/JSON"
+							}
+						}
+					)
+						.then(resPost => {
+							if (resPost.ok) {
+								fetch(
+									"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+									{
+										method: "GET",
+										headers: {
+											"Content-Type": "application/JSON"
+										}
+									}
+								)
+									.then(resGet => resGet.json())
+									.then(data => {
+										this.setState({
+											tasks: data,
+											newTask: ""
+										});
+									})
+									.catch(error => console.log(error));
+							}
+						})
+						.catch(error => console.log(error));
+				}
+			})
+			.then(data => {
+				this.setState({
+					tasks: data,
+					newTask: ""
+				});
+			})
+			.catch(error => console.log(error));
 	}
 	handleAddTask(e) {
 		e.preventDefault();
@@ -59,12 +116,12 @@ class Home extends React.Component {
 						/>
 					</form>
 					<ul className="main-list mx-auto">
-						{tasks.map((value, index) => {
+						{tasks.map((task, index) => {
 							return (
 								<li
 									key={index}
 									className="list-item display-4 my-2 mx-0">
-									{value}
+									{task.label}
 									<span
 										onClick={e =>
 											this.handleDeleteTask(e, index)
