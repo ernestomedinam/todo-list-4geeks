@@ -15,6 +15,32 @@ class Home extends React.Component {
 			],
 			newTask: ""
 		};
+		this.handleAddTask = this.handleAddTask.bind(this);
+		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleDeleteTask = this.handleDeleteTask.bind(this);
+	}
+	handleAddTask(e) {
+		e.preventDefault();
+		let task = e.target.value;
+		this.setState({
+			tasks: [...this.state.tasks, this.state.newTask],
+			newTask: ""
+		});
+	}
+	handleInputChange(e) {
+		this.setState({
+			...this.state,
+			newTask: e.target.value
+		});
+	}
+	handleDeleteTask(e, indexToDelete) {
+		let tasksLeft = this.state.tasks.filter(
+			(value, index) => index != indexToDelete
+		);
+		this.setState({
+			tasks: tasksLeft,
+			newTask: this.state.newTask
+		});
 	}
 	render() {
 		let tasks = this.state.tasks;
@@ -24,10 +50,12 @@ class Home extends React.Component {
 					<h1 className="display-3">Mi lista de tareas</h1>
 				</header>
 				<section className="todo-body">
-					<form className="text-center">
+					<form onSubmit={this.handleAddTask} className="text-center">
 						<input
 							className="my-5 mx-auto display-4"
 							placeholder="Agrega más tareas!"
+							onChange={this.handleInputChange}
+							value={this.state.newTask}
 						/>
 					</form>
 					<ul className="main-list mx-auto">
@@ -37,12 +65,28 @@ class Home extends React.Component {
 									key={index}
 									className="list-item display-4 my-2 mx-0">
 									{value}
+									<span
+										onClick={e =>
+											this.handleDeleteTask(e, index)
+										}
+										className="delete-button"
+									/>
 								</li>
 							);
 						})}
 					</ul>
 					<footer className="list-footer mx-auto mt-5">
-						<p>faltan x tareas por hacer</p>
+						<p>
+							{this.state.tasks.length > 1
+								? `Faltan ${
+										this.state.tasks.length
+								  } tareas por hacer...`
+								: this.state.tasks.length == 1
+									? `Falta ${
+											this.state.tasks.length
+									  } sola tarea por hacer!`
+									: "Felicitaciones, ya hiciste todo!!! Viva el ocio!!!"}
+						</p>
 					</footer>
 				</section>
 			</div>
