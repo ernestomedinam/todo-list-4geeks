@@ -105,10 +105,6 @@ class Home extends React.Component {
 				label: this.state.newTask,
 				done: false
 			});
-			this.setState({
-				...this.state,
-				newTask: ""
-			});
 			console.log(currentTasks);
 			// send request to API
 			fetch(
