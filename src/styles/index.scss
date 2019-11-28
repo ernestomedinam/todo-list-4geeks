@@ -68,6 +68,7 @@ body {
                 width: 20px;
                 height: 20px;
                 border-radius: 2px;
+                cursor: pointer;
                 &::before, &::after {
                     content: " ";
                     position: absolute;

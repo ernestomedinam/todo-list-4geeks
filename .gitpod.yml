@@ -3,3 +3,8 @@ tasks:
 ports:
   - port: 8080
     onOpen: open-browser
+
+vscode:
+  extensions:
+    - burkeholland.simple-react-snippets@1.2.2:aB/gV0ExPn8v6vEZNUjoWA==
+    - dracula-theme.theme-dracula@2.18.1:XgpbxhhUSPGI4YfNBYpr1A==
