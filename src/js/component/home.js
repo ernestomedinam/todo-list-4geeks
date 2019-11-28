@@ -13,6 +13,7 @@ class Home extends React.Component {
 		this.handleAddTask = this.handleAddTask.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleDeleteTask = this.handleDeleteTask.bind(this);
+		this.handleDeleteAll = this.handleDeleteAll.bind(this);
 	}
 	componentDidMount() {
 		// solicitar tareas del usuario
@@ -78,11 +79,33 @@ class Home extends React.Component {
 	}
 	handleAddTask(e) {
 		e.preventDefault();
-		let task = e.target.value;
-		this.setState({
-			tasks: [...this.state.tasks, this.state.newTask],
-			newTask: ""
-		});
+		let newTaskObject = {
+			label: this.state.newTask,
+			done: false
+		};
+		let newList = [...this.state.tasks, newTaskObject];
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "PUT",
+				body: JSON.stringify(newList),
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				if (response.ok) {
+					console.log(
+						"Lista actualizada correctamente en el backend."
+					);
+					this.setState({
+						tasks: newList,
+						newTask: ""
+					});
+				}
+			})
+			.catch(error => console.log(error));
 	}
 	handleInputChange(e) {
 		this.setState({
@@ -91,13 +114,51 @@ class Home extends React.Component {
 		});
 	}
 	handleDeleteTask(e, indexToDelete) {
+		// creamos lista fltrada sin la tarea que queremos borrar
 		let tasksLeft = this.state.tasks.filter(
 			(value, index) => index != indexToDelete
 		);
-		this.setState({
-			tasks: tasksLeft,
-			newTask: this.state.newTask
-		});
+		// fetch para actualizar lista de tareas en API
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "PUT",
+				body: JSON.stringify(tasksLeft),
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				if (response.ok) {
+					console.log(
+						"Lista actualizada correctamente en el backend."
+					);
+					this.setState({
+						tasks: tasksLeft,
+						newTask: ""
+					});
+				}
+			})
+			.catch(error => console.log(error));
+	}
+	handleDeleteAll() {
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
+			{
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/JSON"
+				}
+			}
+		)
+			.then(response => {
+				this.setState({
+					tasks: [],
+					newTask: "Chao, refresca."
+				});
+			})
+			.catch(error => console.log(error));
 	}
 	render() {
 		let tasks = this.state.tasks;
@@ -146,6 +207,11 @@ class Home extends React.Component {
 						</p>
 					</footer>
 				</section>
+				<button
+					onClick={this.handleDeleteAll}
+					className="btn btn-lg btn-danger">
+					Borrar todo, hasta el usuario
+				</button>
 			</div>
 		);
 	}
