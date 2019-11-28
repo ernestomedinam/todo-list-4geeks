@@ -16,7 +16,7 @@ class Home extends React.Component {
 		this.handleDeleteAll = this.handleDeleteAll.bind(this);
 	}
 	componentDidMount() {
-		// solicitar tareas del usuario
+		// solicitar tareas del usuario al API
 		fetch(
 			"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
 			{
@@ -25,16 +25,21 @@ class Home extends React.Component {
 					"Content-Type": "application/JSON"
 				}
 			}
-		)
+		) // fetch entrega un objeto response que recibimos como parámetro
+			// para una función flecha dentro de .then()
 			.then(respuesta => {
+				// clonamos el objeto recibido para consultarlo y accederlo sin
+				// violar su encapsulamiento antes de extraer la data
 				let response = respuesta.clone();
-				console.log(response.status, response.text());
 				if (response.ok) {
-					// recibiemos nuestra lista
+					// si la respuesta es ok, porque el usuario existe, recibimos nuestra lista
+					// y la devolvemos al siguiente then de ESTE fetch para que lo reciba como data
+					// y actualice el estado.
+					console.log("usuario existente, bienvenido de vuelta");
 					return respuesta.json();
 				} else if (response.status === 404) {
-					// crear usuario
-					console.log("intentando crear usuario");
+					// si la respuesta es 404 es porque el usuario no existe,
+					// entonces solicitamos crear usuario al API
 					fetch(
 						"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
 						{
@@ -47,6 +52,10 @@ class Home extends React.Component {
 					)
 						.then(resPost => {
 							if (resPost.ok) {
+								// si la respuesta es 200 OK, entonces hemos creado nuestro usuario
+								// con una lista que tiene una tarea de ejemplo con label: "sample task"
+								console.log("nuevo usuario creado");
+								// ahora intentamos recibir las tareas de este usuario recién creado.
 								fetch(
 									"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam",
 									{
@@ -58,6 +67,8 @@ class Home extends React.Component {
 								)
 									.then(resGet => resGet.json())
 									.then(data => {
+										// aquí actualizamos el estado con la lista recibida en resGet
+										// recibido como variable data después de hacer resGet.json()
 										this.setState({
 											tasks: data,
 											newTask: ""
@@ -69,11 +80,24 @@ class Home extends React.Component {
 						.catch(error => console.log(error));
 				}
 			})
+			// este es el segundo then del primer fetch, este then ocurre
+			// después del primero, pero no necesariamente todo lo que pasa
+			// adentro del primero termina de ejecutarse antes de que este segundo
+			// then empiece a ejecutarse.
 			.then(data => {
-				this.setState({
-					tasks: data,
-					newTask: ""
-				});
+				// cuando el usuario no existe, a este then no entra una data
+				// definida, porque la respuesta fue 404 y el body de la respuesta
+				// no tiene datos. Entonces preguntamos si data existe. Si no existe
+				// entonces no hacemos nada (porque se supone que el usuario no existe y
+				// de resolver eso se encargan los fetch anidados en este primero).
+				// si data existe significa que el usuario existía cuando hicimos el primer
+				// fetch, entonces data contiene las tareas del usuario y actualizamos el estado.
+				if (data) {
+					this.setState({
+						tasks: data,
+						newTask: ""
+					});
+				}
 			})
 			.catch(error => console.log(error));
 	}
@@ -153,10 +177,13 @@ class Home extends React.Component {
 			}
 		)
 			.then(response => {
-				this.setState({
-					tasks: [],
-					newTask: "Chao, refresca."
-				});
+				if (response.ok) {
+					console.log("usuario borrado.");
+					this.setState({
+						tasks: [],
+						newTask: "Refresca para comenzar de nuevo!"
+					});
+				}
 			})
 			.catch(error => console.log(error));
 	}
