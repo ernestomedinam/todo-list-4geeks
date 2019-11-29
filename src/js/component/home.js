@@ -14,6 +14,7 @@ class Home extends React.Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 		this.handleDeleteTask = this.handleDeleteTask.bind(this);
 		this.handleDeleteAll = this.handleDeleteAll.bind(this);
+		this.handleCreateUser = this.handleCreateUser.bind(this);
 		this.fetchUserTasks = this.fetchUserTasks.bind(this);
 		this.fetchCreateUser = this.fetchCreateUser.bind(this);
 		this.fetchUpdateTasks = this.fetchUpdateTasks.bind(this);
@@ -77,14 +78,11 @@ class Home extends React.Component {
 	async componentDidMount() {
 		let fetchTasks = await this.fetchUserTasks(this.APIurl);
 		if (!fetchTasks) {
-			let userCreated = await this.fetchCreateUser(this.APIurl);
-			if (userCreated) {
-				fetchTasks = await this.fetchUserTasks(this.APIurl);
-			} else {
-				console.log(
-					"sorry, we couldn't create your user, please reload and try again..."
-				);
-			}
+			console.log("no user found, please click on create button");
+			alert("no user found, please click on create button");
+			fetchTasks = [];
+		} else {
+			console.log("welcome back.");
 		}
 		this.setState({
 			tasks: fetchTasks,
@@ -109,6 +107,7 @@ class Home extends React.Component {
 				currentTasks
 			);
 			if (tasksAreUpdated) {
+				console.log("task added.");
 				let updatedTasks = await this.fetchUserTasks(this.APIurl);
 				if (updatedTasks) {
 					this.setState({
@@ -125,6 +124,29 @@ class Home extends React.Component {
 			newTask: e.target.value
 		});
 	}
+	async handleCreateUser(e) {
+		try {
+			let userWasCreated = await this.fetchCreateUser(this.APIurl);
+			if (userWasCreated) {
+				console.log("user created");
+				let userTasks = await this.fetchUserTasks(this.APIurl);
+				if (userTasks) {
+					this.setState({
+						tasks: userTasks,
+						newTask: ""
+					});
+				} else {
+					throw Error(
+						"something went wrong fetching new user tasks!"
+					);
+				}
+			} else {
+				console.log("could not create user...");
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	async handleDeleteAll(e) {
 		try {
 			let response = await fetch(this.APIurl, {
@@ -135,20 +157,10 @@ class Home extends React.Component {
 			});
 			if (response.ok) {
 				console.log("user deleted");
-				let wasUserCreated = await this.fetchCreateUser(this.APIurl);
-				if (wasUserCreated) {
-					let userTasks = await this.fetchUserTasks(this.APIurl);
-					if (userTasks) {
-						this.setState({
-							tasks: userTasks,
-							newTask: ""
-						});
-					} else {
-						console.log("sorry, could not load user tasks");
-					}
-				} else {
-					console.log("sorry, could not create user");
-				}
+				this.setState({
+					tasks: [],
+					newTask: ""
+				});
 			} else {
 				console.log(
 					"something failed: ",
@@ -170,10 +182,17 @@ class Home extends React.Component {
 			tasksLeft
 		);
 		if (tasksAreUpdated) {
+			console.log("task deleted.");
 			let updatedTasks = await this.fetchUserTasks(this.APIurl);
 			if (updatedTasks) {
 				this.setState({
 					tasks: updatedTasks,
+					newTask: ""
+				});
+			} else {
+				console.log("it was final task, user deleted");
+				this.setState({
+					tasks: [],
 					newTask: ""
 				});
 			}
@@ -193,6 +212,7 @@ class Home extends React.Component {
 							placeholder="Agrega más tareas!"
 							onChange={this.handleInputChange}
 							value={this.state.newTask}
+							disabled={!this.state.tasks.length > 0}
 						/>
 					</form>
 					<ul className="main-list mx-auto">
@@ -229,8 +249,21 @@ class Home extends React.Component {
 				</section>
 				<button
 					onClick={this.handleDeleteAll}
-					className="btn btn-warning my-3 mx-auto w-50">
-					Borrar todas las tareas!
+					className={
+						this.state.tasks.length > 0
+							? "btn btn-danger mt-3 mx-auto w-50"
+							: "btn btn-danger mt-3 mx-auto w-50 disabled"
+					}>
+					Borrar tareas y usuario
+				</button>
+				<button
+					onClick={this.handleCreateUser}
+					className={
+						this.state.tasks.length > 0
+							? "btn btn-success my-2 mx-auto w-50 disabled"
+							: "btn btn-success my-2 mx-auto w-50"
+					}>
+					Crear usuario
 				</button>
 			</div>
 		);
