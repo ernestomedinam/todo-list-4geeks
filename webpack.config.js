@@ -41,8 +41,13 @@ module.exports = {
   },
   devtool: "source-map",
   devServer: {
-    contentBase:  './dist',
+    host: "0.0.0.0",
+    port: 8080,
+    open: true,
     hot: true,
+    contentBase: path.resolve(__dirname, "src"),
+    watchContentBase: true,
+    contentBase:  './dist',
     disableHostCheck: true,
     historyApiFallback: true
   },

@@ -18,6 +18,10 @@ class AppContextProvider extends React.Component {
 		});
 	}
 
+	async componentDidMount() {
+		this.state.actions.fetchUserTasks();
+	}
+
 	render() {
 		return (
 			<AppContext.Provider value={this.state}>
