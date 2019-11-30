@@ -3,10 +3,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		"https://assets.breatheco.de/apis/fake/todos/user/ernestomedinam";
 	return {
 		store: {
-			todoList: {
-				tasks: [],
-				newTask: ""
-			},
+			tasks: [],
 			somethingElse: {}
 		},
 		actions: {
@@ -33,11 +30,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error);
 				}
 				setStore({
-					todoList: {
-						tasks: tasks,
-						newTask: ""
-					}
+					tasks: tasks
 				});
+			},
+			fetchUpdateTasks: async task => {
+				const actions = getActions();
+				const store = getStore();
+				let tasks = [...store.tasks, task];
+				let wasUpdated = false;
+				try {
+					let response = await fetch(APIurl, {
+						method: "PUT",
+						headers: {
+							"Content-Type": "application/JSON"
+						},
+						body: JSON.stringify(tasks)
+					});
+					if (response.ok) {
+						wasUpdated = true;
+						actions.fetchUserTasks();
+					} else {
+						console.log("tasks were not updated, try again");
+					}
+				} catch (error) {
+					console.log(error);
+				}
+				return wasUpdated;
 			}
 		}
 	};

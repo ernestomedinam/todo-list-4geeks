@@ -18,7 +18,7 @@ class AppContextProvider extends React.Component {
 		});
 	}
 
-	async componentDidMount() {
+	componentDidMount() {
 		this.state.actions.fetchUserTasks();
 	}
 
