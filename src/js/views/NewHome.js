@@ -10,8 +10,6 @@ class NewHome extends React.Component {
 		this.state = {
 			initialLoad: false,
 			isReady: false,
-			theme: "light",
-			size: 4,
 			newTask: ""
 		};
 		this.handleAddTask = this.handleAddTask.bind(this);
