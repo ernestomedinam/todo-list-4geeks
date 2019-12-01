@@ -16,25 +16,59 @@ class NewHome extends React.Component {
 	static contextType = AppContext;
 	async handleAddTask(e) {
 		e.preventDefault();
+		if (this.state.newTask.trim().length < 3) {
+			console.log("sorry, can't create such short tasks!");
+			alert("sorry, can't create such short tasks!");
+		} else {
+			this.setState({
+				...this.state,
+				isReady: false
+			});
+			let tasks = [
+				...this.context.store.tasks,
+				{
+					label: this.state.newTask,
+					done: false
+				}
+			];
+			let wasUpdated = await this.context.actions.fetchUpdateTasks(tasks);
+			if (wasUpdated) {
+				console.log("task added.");
+				this.setState({
+					...this.state,
+					newTask: "",
+					isReady: true
+				});
+			}
+		}
+	}
+	async handleDeleteTask(e, idToDelete) {
 		this.setState({
 			...this.state,
 			isReady: false
 		});
-		let task = {
-			label: this.state.newTask,
-			done: false
-		};
-		let wasUpdated = await this.context.actions.fetchUpdateTasks(task);
-		console.log(wasUpdated);
+		let tasksLeft = this.context.store.tasks.filter(
+			(task, index) => index != idToDelete
+		);
+		let wasUpdated = await this.context.actions.fetchUpdateTasks(tasksLeft);
+		if (wasUpdated) {
+			console.log("task deleted.");
+			this.setState({
+				...this.state,
+				isReady: true
+			});
+		}
+	}
+	handleCreateUser(e) {
+		this.context.actions.fetchCreateUser();
+	}
+	handleDeleteAll(e) {
 		this.setState({
 			...this.state,
-			newTask: "",
-			isReady: true
+			newTask: ""
 		});
+		this.context.actions.fetchDeleteUser();
 	}
-	handleDeleteTask(e, idToDelete) {}
-	handleCreateUser(e) {}
-	handleDeleteAll(e) {}
 	handleInputChange(e) {
 		this.setState({
 			...this.state,
@@ -95,7 +129,7 @@ class NewHome extends React.Component {
 					</footer>
 				</section>
 				<button
-					onClick={this.handleDeleteAll}
+					onClick={e => this.handleDeleteAll()}
 					className={
 						tasks.length > 0
 							? "btn btn-danger mt-3 mx-auto w-50"
@@ -104,7 +138,7 @@ class NewHome extends React.Component {
 					Borrar tareas y usuario
 				</button>
 				<button
-					onClick={this.handleCreateUser}
+					onClick={e => this.handleCreateUser()}
 					className={
 						tasks.length > 0
 							? "btn btn-success my-2 mx-auto w-50 disabled"

@@ -9,6 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		actions: {
 			fetchUserTasks: async () => {
 				let tasks = [];
+				let userExists = false;
 				try {
 					let response = await fetch(APIurl, {
 						method: "GET",
@@ -18,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					if (response.ok) {
 						tasks = await response.json();
-						console.log("this is tasks: ", tasks);
+						userExists = true;
 					} else if (response.stats == 404) {
 						console.log(
 							"no user found, please click on create button"
@@ -32,11 +33,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({
 					tasks: tasks
 				});
+				return userExists;
 			},
-			fetchUpdateTasks: async task => {
+			fetchUpdateTasks: async tasks => {
 				const actions = getActions();
-				const store = getStore();
-				let tasks = [...store.tasks, task];
 				let wasUpdated = false;
 				try {
 					let response = await fetch(APIurl, {
@@ -47,8 +47,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: JSON.stringify(tasks)
 					});
 					if (response.ok) {
+						await actions.fetchUserTasks();
 						wasUpdated = true;
-						actions.fetchUserTasks();
 					} else {
 						console.log("tasks were not updated, try again");
 					}
@@ -56,6 +56,48 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log(error);
 				}
 				return wasUpdated;
+			},
+			fetchDeleteUser: async () => {
+				try {
+					let response = await fetch(APIurl, {
+						method: "DELETE",
+						headers: {
+							"Content-Type": "application/JSON"
+						}
+					});
+					if (response.ok) {
+						console.log("user deleted");
+						setStore({
+							tasks: []
+						});
+					} else {
+						console.log(
+							"something failed: ",
+							response.status,
+							", ",
+							response.statusText
+						);
+					}
+				} catch (error) {
+					console.log(error);
+				}
+			},
+			fetchCreateUser: async () => {
+				let actions = getActions();
+				try {
+					let response = await fetch(APIurl, {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/JSON"
+						},
+						body: "[]"
+					});
+					if (response.ok) {
+						actions.fetchUserTasks();
+					}
+				} catch (error) {
+					console.log(error);
+				}
 			}
 		}
 	};

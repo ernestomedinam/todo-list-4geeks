@@ -18,8 +18,12 @@ class AppContextProvider extends React.Component {
 		});
 	}
 
-	componentDidMount() {
-		this.state.actions.fetchUserTasks();
+	async componentDidMount() {
+		let userExists = await this.state.actions.fetchUserTasks();
+		if (!userExists) {
+			console.log("no user found, please click on create button");
+			alert("no user found, please click on create button");
+		}
 	}
 
 	render() {
