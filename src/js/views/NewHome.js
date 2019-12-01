@@ -1,5 +1,8 @@
 import React from "react";
 import { AppContext } from "../store/appContext.js";
+import TaskList from "../component/TaskList.js";
+import ListInput from "../component/ListInput.js";
+import ListItem from "../component/ListItem.js";
 
 class NewHome extends React.Component {
 	constructor(props) {
@@ -88,46 +91,28 @@ class NewHome extends React.Component {
 				<header className="todo-header text-center mb-3">
 					<h1 className="display-3">Mi lista de tareas</h1>
 				</header>
-				<section className="todo-body">
-					<form onSubmit={this.handleAddTask} className="text-center">
-						<input
-							className="my-5 mx-auto display-4"
-							placeholder="Agrega más tareas!"
-							onChange={this.handleInputChange}
+				<TaskList
+					length={tasks.length}
+					input={
+						<ListInput
+							onSubmitHandler={this.handleAddTask}
+							onChangeHandler={this.handleInputChange}
 							value={this.state.newTask}
-							disabled={disableInput()}
+							disableInput={disableInput()}
 						/>
-					</form>
-					<ul className="main-list mx-auto">
-						{tasks.length > 0 &&
-							tasks.map((task, index) => {
-								return (
-									<li
-										key={index}
-										className="list-item display-4 my-2 mx-0">
-										{task.label}
-										<span
-											onClick={e =>
-												this.handleDeleteTask(e, index)
-											}
-											className="delete-button"
-										/>
-									</li>
-								);
-							})}
-					</ul>
-					<footer className="list-footer mx-auto mt-5">
-						<p>
-							{tasks.length > 1
-								? `Faltan ${tasks.length} tareas por hacer...`
-								: tasks.length == 1
-									? `Falta ${
-											tasks.length
-									  } sola tarea por hacer!`
-									: "Felicitaciones, ya hiciste todo!!! Viva el ocio!!!"}
-						</p>
-					</footer>
-				</section>
+					}
+					items={tasks.map((task, index) => {
+						return (
+							<ListItem
+								key={index}
+								label={task.label}
+								onClickHandler={e =>
+									this.handleDeleteTask(e, index)
+								}
+							/>
+						);
+					})}
+				/>
 				<button
 					onClick={e => this.handleDeleteAll()}
 					className={
