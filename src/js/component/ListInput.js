@@ -11,6 +11,7 @@ const ListInput = props => {
 				value={props.value}
 				disabled={props.disableInput}
 			/>
+			{!props.storeIsReady && <div className="snake-loader" />}
 		</form>
 	);
 };
@@ -21,5 +22,6 @@ ListInput.propTypes = {
 	onSubmitHandler: PropTypes.func,
 	onChangeHandler: PropTypes.func,
 	value: PropTypes.string,
-	disableInput: PropTypes.bool
+	disableInput: PropTypes.bool,
+	storeIsReady: PropTypes.bool
 };

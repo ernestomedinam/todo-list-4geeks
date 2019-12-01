@@ -84,6 +84,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			fetchCreateUser: async () => {
 				let actions = getActions();
+				let userWasCreated = false;
 				try {
 					let response = await fetch(APIurl, {
 						method: "POST",
@@ -93,11 +94,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 						body: "[]"
 					});
 					if (response.ok) {
-						actions.fetchUserTasks();
+						await actions.fetchUserTasks();
+						userWasCreated = true;
 					}
 				} catch (error) {
 					console.log(error);
 				}
+				return userWasCreated;
 			}
 		}
 	};

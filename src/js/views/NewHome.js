@@ -8,7 +8,8 @@ class NewHome extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			isReady: true,
+			initialLoad: false,
+			isReady: false,
 			theme: "light",
 			size: 4,
 			newTask: ""
@@ -17,6 +18,15 @@ class NewHome extends React.Component {
 		this.handleInputChange = this.handleInputChange.bind(this);
 	}
 	static contextType = AppContext;
+	componentDidUpdate() {
+		if (!this.state.initialLoad) {
+			this.setState({
+				...this.state,
+				initialLoad: true,
+				isReady: true
+			});
+		}
+	}
 	async handleAddTask(e) {
 		e.preventDefault();
 		if (this.state.newTask.trim().length < 3) {
@@ -62,15 +72,30 @@ class NewHome extends React.Component {
 			});
 		}
 	}
-	handleCreateUser(e) {
-		this.context.actions.fetchCreateUser();
-	}
-	handleDeleteAll(e) {
+	async handleCreateUser(e) {
 		this.setState({
 			...this.state,
-			newTask: ""
+			isReady: false
 		});
-		this.context.actions.fetchDeleteUser();
+		await this.context.actions.fetchCreateUser();
+		// if (userWasCreated) {
+		this.setState({
+			...this.state,
+			isReady: true
+		});
+		// }
+	}
+	async handleDeleteAll(e) {
+		this.setState({
+			...this.state,
+			newTask: "",
+			isReady: false
+		});
+		await this.context.actions.fetchDeleteUser();
+		this.setState({
+			...this.state,
+			isReady: true
+		});
 	}
 	handleInputChange(e) {
 		this.setState({
@@ -99,6 +124,7 @@ class NewHome extends React.Component {
 							onChangeHandler={this.handleInputChange}
 							value={this.state.newTask}
 							disableInput={disableInput()}
+							storeIsReady={this.state.isReady}
 						/>
 					}
 					items={tasks.map((task, index) => {
@@ -116,16 +142,16 @@ class NewHome extends React.Component {
 				<button
 					onClick={e => this.handleDeleteAll()}
 					className={
-						tasks.length > 0
-							? "btn btn-danger mt-3 mx-auto w-50"
-							: "btn btn-danger mt-3 mx-auto w-50 disabled"
+						tasks.length > 0 && this.state.isReady
+							? "btn btn-danger mt-4 mx-auto w-50"
+							: "btn btn-danger mt-4 mx-auto w-50 disabled"
 					}>
 					Borrar tareas y usuario
 				</button>
 				<button
 					onClick={e => this.handleCreateUser()}
 					className={
-						tasks.length > 0
+						tasks.length > 0 || !this.state.isReady
 							? "btn btn-success my-2 mx-auto w-50 disabled"
 							: "btn btn-success my-2 mx-auto w-50"
 					}>

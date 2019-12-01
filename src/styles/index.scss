@@ -92,3 +92,29 @@ body {
     }
 }
 
+.snake-loader {
+    display: inline-block;
+    // width: 30px;
+    // height: 30px;
+    position: relative;
+    right: 24px;
+    &::after {
+        content: " ";
+        display: block;
+        width: 24px;
+        height: 24px;
+        margin: 3px 0;
+        border-radius: 50%;
+        border: 3px solid rgba($color: black, $alpha: 0.5);
+        border-color: rgba($color: black, $alpha: 0.5) transparent rgba($color: black, $alpha: 0.5) transparent;
+        animation: rotate-snake 1.2s linear infinite;
+    }
+}
+@keyframes rotate-snake {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
