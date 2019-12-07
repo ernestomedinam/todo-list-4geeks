@@ -1,7 +1,8 @@
 {
   "parser": "babel-eslint",
   "plugins": [
-    "react"
+    "react",
+    "react-hooks"
   ],
   "env": {
     "browser": true,
@@ -22,7 +23,9 @@
         "exports": "never",
         "functions": "ignore",
     }],
-    "react/prop-types": [2]
+    "react/prop-types": [2],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
   },
   "extends": ["eslint:recommended", "plugin:react/recommended"]
 }
