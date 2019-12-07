@@ -246,6 +246,7 @@ class Home extends React.Component {
 				</section>
 				<button
 					onClick={this.handleDeleteAll}
+					disabled={!this.state.tasks.length > 0}
 					className={
 						this.state.tasks.length > 0
 							? "btn btn-danger mt-3 mx-auto w-50"
@@ -255,6 +256,7 @@ class Home extends React.Component {
 				</button>
 				<button
 					onClick={this.handleCreateUser}
+					disabled={this.state.tasks.length > 0}
 					className={
 						this.state.tasks.length > 0
 							? "btn btn-success my-2 mx-auto w-50 disabled"

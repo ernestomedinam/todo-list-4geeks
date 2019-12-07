@@ -139,6 +139,7 @@ class NewHome extends React.Component {
 				/>
 				<button
 					onClick={e => this.handleDeleteAll()}
+					disabled={!tasks.length > 0 || !this.state.isReady}
 					className={
 						tasks.length > 0 && this.state.isReady
 							? "btn btn-danger mt-4 mx-auto w-50"
@@ -148,6 +149,7 @@ class NewHome extends React.Component {
 				</button>
 				<button
 					onClick={e => this.handleCreateUser()}
+					disabled={tasks.length > 0 || !this.state.isReady}
 					className={
 						tasks.length > 0 || !this.state.isReady
 							? "btn btn-success my-2 mx-auto w-50 disabled"

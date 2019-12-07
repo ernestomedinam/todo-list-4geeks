@@ -104,6 +104,7 @@ const HooksHome = props => {
 					await actions.fetchDeleteUser();
 					setWorking(false);
 				}}
+				disabled={!store.tasks.length > 0 || working}
 				className={
 					store.tasks.length > 0 && !working
 						? "btn btn-danger mt-4 mx-auto w-50"
@@ -121,7 +122,8 @@ const HooksHome = props => {
 					store.tasks.length > 0 || working
 						? "btn btn-success my-2 mx-auto w-50 disabled"
 						: "btn btn-success my-2 mx-auto w-50"
-				}>
+				}
+				disabled={store.tasks.length > 0 || working}>
 				Crear usuario
 			</button>
 			<header className="todo-header text-center mb-3">
