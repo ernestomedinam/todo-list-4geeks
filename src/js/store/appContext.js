@@ -1,39 +1,40 @@
-import React, { createContext } from "react";
+import React, { createContext, useState, useEffect } from "react";
 import getState from "./flux.js";
 import PropTypes from "prop-types";
 
 export const AppContext = createContext(null);
 
-class AppContextProvider extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = getState({
-			getStore: () => this.state.store,
-			getActions: () => this.state.actions,
+const AppContextProvider = props => {
+	const [state, setState] = useState(
+		getState({
+			getStore: () => state.store,
+			getActions: () => state.actions,
 			setStore: updatedStore =>
-				this.setState({
-					store: Object.assign(this.state.store, updatedStore),
-					actions: { ...this.state.actions }
+				setState({
+					store: Object.assign(state.store, updatedStore),
+					actions: { ...state.actions }
 				})
-		});
-	}
-
-	async componentDidMount() {
-		let userExists = await this.state.actions.fetchUserTasks();
-		if (!userExists) {
-			console.log("no user found, please click on create button");
-			alert("no user found, please click on create button");
-		}
-	}
-
-	render() {
-		return (
-			<AppContext.Provider value={this.state}>
-				{this.props.children}
-			</AppContext.Provider>
-		);
-	}
-}
+		})
+	);
+	useEffect(() => {
+		const fetchData = async () => {
+			let userExists = await state.actions.fetchUserTasks();
+			if (!userExists) {
+				console.log("no user found, please click on create button");
+				alert("no user found, please click on create button");
+			}
+		};
+		fetchData();
+		return () => {
+			// cleanup
+		};
+	}, []); // runs only on first mount.
+	return (
+		<AppContext.Provider value={state}>
+			{props.children}
+		</AppContext.Provider>
+	);
+};
 
 export default AppContextProvider;
 
