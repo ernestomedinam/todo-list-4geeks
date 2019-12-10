@@ -17,6 +17,8 @@ const AppContextProvider = props => {
 		})
 	);
 	useEffect(() => {
+		// it is recommended to not make useEffect and async function;
+		// it is best to declare an async function inside, and call it afterwards.
 		const fetchData = async () => {
 			let userExists = await state.actions.fetchUserTasks();
 			if (!userExists) {
