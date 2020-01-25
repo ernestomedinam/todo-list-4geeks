@@ -22,7 +22,7 @@ const HookCtxHome = props => {
 		}
 	};
 	const handleDeleteTask = async (e, idToDelete) => {
-		let tasksLeft = store.tasks.filter(
+		let tasksLeft = store.hookTasks.tasks.filter(
 			(task, index) => index != idToDelete
 		);
 		actions.fetchUpdateTasks(tasksLeft, false);
