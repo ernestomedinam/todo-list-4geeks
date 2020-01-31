@@ -7,6 +7,7 @@ import HooksHome from "./views/HooksHome";
 import HookCtxHome from "./views/HookCtxHome";
 import HookedContextProvider from "./store/HookedContext";
 import UserImages from "./views/UserImages";
+import ImageContextProvider from "./store/ImageContext";
 
 const Layout = props => {
 	return (
@@ -28,8 +29,11 @@ const Layout = props => {
 						<HookCtxHome />
 					</HookedContextProvider>
 				</Route>
-
-				<Route exact path="/user-images" component={UserImages} />
+				<Route exact path="/user-images">
+					<ImageContextProvider>
+						<UserImages />
+					</ImageContextProvider>
+				</Route>
 			</Switch>
 		</BrowserRouter>
 	);

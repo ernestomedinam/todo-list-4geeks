@@ -92,6 +92,33 @@ body {
     }
 }
 
+.image {
+    &-container {
+        display: flex;
+        flex-flow: row;
+        flex-wrap: wrap;
+        padding: 2rem 0;
+    }
+    &-card {
+        display: flex;
+        flex-flow: column;
+        flex-wrap: nowrap;
+        justify-content: center;
+        &-title {
+            text-align: center;
+        }
+        &-img-box {
+            display: flex;
+            justify-content: center;
+            > img {
+                max-width: 256px;
+
+            }
+        }
+    }
+}
+
+
 .snake-loader {
     display: inline-block;
     // width: 30px;
