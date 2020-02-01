@@ -5,6 +5,7 @@ import imageReducer from "./imageReducer";
 export const ImageContext = createContext(null);
 
 const ImageContextProvider = props => {
+	// const APIurl = "";
 	const [store, dispatch] = useReducer(imageReducer, {
 		userImages: [
 			{
@@ -21,7 +22,14 @@ const ImageContextProvider = props => {
 	});
 	const actions = {
 		fetchUserImages: () => {},
-		fetchUploadUserImage: () => {}
+		fetchUploadUserImage: formData => {
+			console.log("here we shall try to fetch post to api");
+			// fetch(APIurl, formData, {
+			//     headers: {
+			//         "content-type": "multipart/form-data"
+			//     }
+			// });
+		}
 	};
 	return (
 		<ImageContext.Provider value={{ store, actions }}>
