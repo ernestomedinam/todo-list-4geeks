@@ -1,12 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ImageCard = ({ image }) => {
+const ImageCard = ({ image, url }) => {
 	return (
 		<div className="image-card">
 			<div className="image-card-title">{image.title}</div>
 			<div className="image-card-img-box">
-				<img src={image.url} />
+				<img src={url + "/" + image.image_url} />
 			</div>
 		</div>
 	);
@@ -15,5 +15,6 @@ const ImageCard = ({ image }) => {
 export default ImageCard;
 
 ImageCard.propTypes = {
-	image: PropTypes.object
+	image: PropTypes.object,
+	url: PropTypes.string
 };

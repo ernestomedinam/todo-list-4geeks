@@ -1,5 +1,6 @@
 const getState = ({ getStore, getActions, setStore }) => {
-	const APIurl = "https://assets.breatheco.de/apis/fake/todos/user/ernesto";
+	const APIurl =
+		"https://3000-b7929254-f40d-46a8-a615-1c7df27b5b03.ws-us02.gitpod.io/todos/ernesto";
 	return {
 		store: {
 			tasks: [],
@@ -13,17 +14,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(APIurl, {
 						method: "GET",
 						headers: {
-							"Content-Type": "application/JSON"
+							"Content-Type": "application/json"
 						}
 					});
 					if (response.ok) {
 						tasks = await response.json();
 						userExists = true;
-					} else if (response.stats == 404) {
+					} else if (response.status == 404) {
 						console.log(
 							"no user found, please click on create button"
 						);
 						alert("no user found, please click on create button");
+					} else {
+						console.log("error in response: ", response.statusText);
 					}
 				} catch (error) {
 					console.log("something failed");
@@ -41,7 +44,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(APIurl, {
 						method: "PUT",
 						headers: {
-							"Content-Type": "application/JSON"
+							"Content-Type": "application/json"
 						},
 						body: JSON.stringify(tasks)
 					});
@@ -61,7 +64,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(APIurl, {
 						method: "DELETE",
 						headers: {
-							"Content-Type": "application/JSON"
+							"Content-Type": "application/json"
 						}
 					});
 					if (response.ok) {
@@ -88,7 +91,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let response = await fetch(APIurl, {
 						method: "POST",
 						headers: {
-							"Content-Type": "application/JSON"
+							"Content-Type": "application/json"
 						},
 						body: "[]"
 					});

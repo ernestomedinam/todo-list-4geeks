@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 export const HookedContext = createContext(null);
 
 const HookedContextProvider = props => {
-	const APIurl = "https://assets.breatheco.de/apis/fake/todos/user/ernesto";
+	const APIurl =
+		"https://3000-b7929254-f40d-46a8-a615-1c7df27b5b03.ws-us02.gitpod.io/todos/ernesto";
 	const [store, dispatch] = useReducer(storeReducer, {
 		hookTasks: {
 			tasks: [],
@@ -27,7 +28,7 @@ const HookedContextProvider = props => {
 				let response = await fetch(APIurl, {
 					method: "GET",
 					headers: {
-						"Content-Type": "application/JSON"
+						"Content-Type": "application/json"
 					}
 				});
 				if (response.ok) {
@@ -59,7 +60,7 @@ const HookedContextProvider = props => {
 				let response = await fetch(APIurl, {
 					method: "PUT",
 					headers: {
-						"Content-Type": "application/JSON"
+						"Content-Type": "application/json"
 					},
 					body: JSON.stringify(tasks)
 				});
@@ -80,7 +81,7 @@ const HookedContextProvider = props => {
 				let response = await fetch(APIurl, {
 					method: "DELETE",
 					headers: {
-						"Content-Type": "application/JSON"
+						"Content-Type": "application/json"
 					}
 				});
 				if (response.ok) {
@@ -109,7 +110,7 @@ const HookedContextProvider = props => {
 				let response = await fetch(APIurl, {
 					method: "POST",
 					headers: {
-						"Content-Type": "application/JSON"
+						"Content-Type": "application/json"
 					},
 					body: "[]"
 				});

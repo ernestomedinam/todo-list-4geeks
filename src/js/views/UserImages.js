@@ -1,9 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { ImageContext } from "../store/ImageContext";
 import ImageCard from "../component/ImageCard";
 
 const UserImages = props => {
 	const { store, actions } = useContext(ImageContext);
+	const [uploadedAt, setUploadedAt] = useState("start");
 	const [newImage, setNewImage] = useState({
 		title: "",
 		file: null
@@ -17,6 +18,7 @@ const UserImages = props => {
 	const handleImageChange = e => {
 		console.log("handling image change: ", e.target.files.length);
 		let file = e.target.files[0];
+		console.log(file.name);
 		setNewImage({
 			...newImage,
 			file: file
@@ -29,19 +31,31 @@ const UserImages = props => {
 		formData.append("file", newImage.file, newImage.file.name);
 		formData.append("title", newImage.title);
 		actions.fetchUploadUserImage(formData);
+		setNewImage({
+			title: "",
+			file: null
+		});
+		setUploadedAt(String(Date.now()));
 	};
 	return (
 		<div className="container">
 			<h1>{"welcome to user images"}</h1>
-			<div className="image-container">
-				{store.userImages.map(image => {
-					return (
-						<div key={image.id} className="col col-md-4">
-							<ImageCard image={image} />
-						</div>
-					);
-				})}
-			</div>
+
+			{store.userImages && (
+				<div className="image-container">
+					{store.userImages.map(image => {
+						return (
+							<div key={image.id} className="col col-md-4">
+								<ImageCard
+									image={image}
+									url={store.staticAPIurl}
+								/>
+							</div>
+						);
+					})}
+				</div>
+			)}
+
 			<div className="image-form">
 				<form onSubmit={handleSubmit}>
 					<label>
@@ -60,6 +74,7 @@ const UserImages = props => {
 							name="imageFile"
 							accept="image/png image/jpeg image/jpg"
 							onChange={handleImageChange}
+							key={uploadedAt}
 							required
 						/>
 					</label>
