@@ -104,17 +104,46 @@ body {
         flex-flow: column;
         flex-wrap: nowrap;
         justify-content: center;
+        align-items: center;
+        padding: 1rem;
         &-title {
             text-align: center;
+            width: 100%;
         }
         &-img-box {
             display: flex;
             justify-content: center;
-            > img {
-                max-width: 256px;
+            width: 100%;
+            // > img {
+            //     max-width: 256px;
 
-            }
+            // }
         }
+    }
+}
+
+.delete-image-button {
+    color: white;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    &::before, &::after {
+        content: " ";
+        position: absolute;
+        height: 16px;
+        width: 4px;
+        background-color: red;
+    }
+    &::before {
+        transform: rotate(45deg);
+    }
+    &::after {
+        transform: rotate(-45deg);
     }
 }
 

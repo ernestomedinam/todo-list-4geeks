@@ -49,6 +49,9 @@ const UserImages = props => {
 								<ImageCard
 									image={image}
 									url={store.staticAPIurl}
+									onDelete={e =>
+										actions.fetchDeleteUserImage(image.id)
+									}
 								/>
 							</div>
 						);

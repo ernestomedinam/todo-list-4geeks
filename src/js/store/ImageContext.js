@@ -54,6 +54,22 @@ const ImageContextProvider = props => {
 				console.log("some unknown error: ", error);
 			}
 			actions.fetchUserImages();
+		},
+		fetchDeleteUserImage: async id => {
+			console.log("we gonna try and delete an user image");
+			try {
+				let response = await fetch(APIurl + "/" + id, {
+					method: "DELETE"
+				});
+				if (response.ok) {
+					console.log("deleted!!");
+				} else {
+					console.log("something went wrong: ", response.statusText);
+				}
+			} catch (error) {
+				console.log("some unknown error: ", error);
+			}
+			actions.fetchUserImages();
 		}
 	};
 	useEffect(() => {
