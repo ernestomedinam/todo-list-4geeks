@@ -47,7 +47,7 @@ const ImageContextProvider = props => {
 				if (response.ok) {
 					console.log("response is ok!: ", response.statusText);
 				} else {
-					console.log("shit, went wrong: ", response.statusText);
+					console.log("something went wrong: ", response.statusText);
 					console.log(response, " and ", response.text());
 				}
 			} catch (error) {
