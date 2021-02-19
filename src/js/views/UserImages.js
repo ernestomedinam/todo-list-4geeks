@@ -41,23 +41,26 @@ const UserImages = props => {
 		<div className="container">
 			<h1>{"welcome to user images"}</h1>
 
-			{store.userImages && (
-				<div className="image-container">
-					{store.userImages.map(image => {
-						return (
-							<div key={image.id} className="col col-md-4">
-								<ImageCard
-									image={image}
-									url={store.staticAPIurl}
-									onDelete={e =>
-										actions.fetchDeleteUserImage(image.id)
-									}
-								/>
-							</div>
-						);
-					})}
-				</div>
-			)}
+			{store.userImages &&
+				store.userImages.length > 0 && (
+					<div className="image-container">
+						{store.userImages.map(image => {
+							return (
+								<div key={image.id} className="col col-md-4">
+									<ImageCard
+										image={image}
+										url={store.staticAPIurl}
+										onDelete={e =>
+											actions.fetchDeleteUserImage(
+												image.id
+											)
+										}
+									/>
+								</div>
+							);
+						})}
+					</div>
+				)}
 
 			<div className="image-form">
 				<form onSubmit={handleSubmit}>

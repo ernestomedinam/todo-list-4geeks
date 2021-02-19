@@ -6,9 +6,9 @@ export const ImageContext = createContext(null);
 
 const ImageContextProvider = props => {
 	const APIurl =
-		"https://3000-b7929254-f40d-46a8-a615-1c7df27b5b03.ws-us02.gitpod.io/todos/ernesto/images";
+		"https://3000-crimson-albatross-yc6awi76.ws-us03.gitpod.io/todos/ernesto/images";
 	const staticAPIurl =
-		"https://3000-b7929254-f40d-46a8-a615-1c7df27b5b03.ws-us02.gitpod.io";
+		"https://3000-crimson-albatross-yc6awi76.ws-us03.gitpod.io";
 	const [store, dispatch] = useReducer(imageReducer, {
 		staticAPIurl
 	});
@@ -47,7 +47,7 @@ const ImageContextProvider = props => {
 				if (response.ok) {
 					console.log("response is ok!: ", response.statusText);
 				} else {
-					console.log("shit, went wrong: ", response.statusText);
+					console.log("shit went wrong: ", response.statusText);
 					console.log(response, " and ", response.text());
 				}
 			} catch (error) {
