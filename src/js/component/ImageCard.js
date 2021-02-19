@@ -9,7 +9,8 @@ const ImageCard = ({ image, url, onDelete }) => {
 				<span className="delete-image-button ml-4" onClick={onDelete} />
 			</div>
 			<div className="image-card-img-box">
-				<img src={image.image_url} />
+				{/* <img src={image.image_url} /> */}
+				<img src={url + "/" + image.image_url} />
 			</div>
 		</div>
 	);
